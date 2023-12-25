@@ -46,7 +46,7 @@ Where 15 is the priority from the filter. If you forget this part the default pr
 To isolate a hook to reduce it to a single callback it is possible by adding `@hook-isolated` annotation on the test method:
 ```php
 /**
-* @hook-isolate my-event myCallback 15
+ * @hook-isolate my-event myCallback 15
  */
 ```
 Where 15 is the priority from the filter. If you forget this part the default priority will be 10.
