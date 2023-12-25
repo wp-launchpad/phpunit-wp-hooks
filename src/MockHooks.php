@@ -27,16 +27,16 @@ trait MockHooks
 
     public function resetHooks(): void
     {
-        $callbacks = $this->getCallbacks();
-        foreach ($callbacks as $callback) {
-            $hook = $this->addPrefix($callback->getHook());
-            remove_filter($hook, [$this, $callback->getCallback()], $callback->getPriority());
-        }
-
         $isolatedHooks = $this->getIsolated();
         foreach ($isolatedHooks as $isolatedHook) {
             $hook = $this->addPrefix($isolatedHook->getHook());
             $this->restoreWpHook($hook);
+        }
+
+        $callbacks = $this->getCallbacks();
+        foreach ($callbacks as $callback) {
+            $hook = $this->addPrefix($callback->getHook());
+            remove_filter($hook, [$this, $callback->getCallback()], $callback->getPriority());
         }
     }
 
@@ -60,8 +60,8 @@ trait MockHooks
                 $callback = new Callback();
 
                 $callback->setCallback($method);
-                $method = new ReflectionMethod($class, $method);
-                $callback->setParameters($method->getNumberOfParameters());
+                $reflectedMethod = new ReflectionMethod($class, $method);
+                $callback->setParameters($reflectedMethod->getNumberOfParameters());
 
                 $parts = explode(' ', $annotation);
 
@@ -92,7 +92,6 @@ trait MockHooks
         if (! $annotations['method'] || ! $annotations['method']['hook-isolated']) {
             return $isolatedHooks;
         }
-
         foreach ($annotations['method']['hook-isolated'] as $annotation) {
             $isolated = new Isolated();
             $parts = explode(' ', $annotation);
@@ -108,7 +107,6 @@ trait MockHooks
 
             $isolatedHooks []= $isolated;
         }
-
         return $isolatedHooks;
     }
 
