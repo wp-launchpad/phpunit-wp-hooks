@@ -1,6 +1,6 @@
 ## PHPUnit WP Hooks
 
-This library is a PHPUnit aimed to facilitate mocking WordPress hooks during integration testing.
+This library is a PHPUnit library aimed to facilitate mocking WordPress hooks during integration testing.
 
 ### Install
 
