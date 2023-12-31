@@ -52,7 +52,7 @@ trait MockHooks
         $methods = get_class_methods($class);
         foreach ($methods as $method) {
             $annotations = Test::parseTestMethodAnnotations($class, $method);
-            if (! $annotations['method'] || ! $annotations['method']['hook']) {
+            if (! key_exists('method', $annotations) || ! is_array($annotations['method']) || ! key_exists('hook', $annotations['method'])) {
                 continue;
             }
 
@@ -88,8 +88,12 @@ trait MockHooks
         $class = get_class($this);
 
         $isolatedHooks = [];
-        $annotations = Test::parseTestMethodAnnotations($class, $this->getCurrentTest());
-        if (! $annotations['method'] || ! $annotations['method']['hook-isolated']) {
+
+        $parts = explode(' ', $this->getCurrentTest());
+        $testedMethod = array_shift($parts);
+
+        $annotations = Test::parseTestMethodAnnotations($class, $testedMethod);
+        if (! key_exists('method', $annotations) || ! is_array($annotations['method']) || ! key_exists('hook-isolated', $annotations['method'])) {
             return $isolatedHooks;
         }
         foreach ($annotations['method']['hook-isolated'] as $annotation) {
