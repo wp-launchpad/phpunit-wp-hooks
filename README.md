@@ -9,7 +9,7 @@ To install the extension require it:
 composer require wp-launchpad/phpunit-wp-hooks --dev
 ```
 
-Once you done that then you can use the trait ``MockHooks`` and at the following logic to your base `TestCase`:
+Once you done that then you can use the trait ``MockHooks`` and at the following logic to your base `TestCase` where `my_prefix` is your plugin prefix:
 ```php
     protected function setUp(): void
     {
@@ -22,6 +22,15 @@ Once you done that then you can use the trait ``MockHooks`` and at the following
         $this->resetHooks();
         parent::tearDown();
     }
+
+
+	function getPrefix(): string {
+		return 'my_prefix';
+	}
+
+	function getCurrentTest(): string {
+		return $this->getName();
+	}
 ```
 
 ### Mock hooks
