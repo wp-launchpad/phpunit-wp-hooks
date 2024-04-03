@@ -24,13 +24,13 @@ Once you done that then you can use the trait ``MockHooks`` and at the following
     }
 
 
-	function getPrefix(): string {
-		return 'my_prefix';
-	}
+     function getPrefix(): string {
+        return 'my_prefix';
+     }
 
-	function getCurrentTest(): string {
-		return $this->getName();
-	}
+     function getCurrentTest(): string {
+        return $this->getName();
+     }
 ```
 
 ### Mock hooks
