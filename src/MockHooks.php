@@ -119,7 +119,9 @@ trait MockHooks
         return str_replace('$prefix', $this->getPrefix(), $hook);
     }
 
-    abstract function getPrefix(): string;
+    protected function getPrefix(): string {
+        return '';
+    }
 
-    abstract function getCurrentTest(): string;
+    abstract protected function getCurrentTest(): string;
 }
