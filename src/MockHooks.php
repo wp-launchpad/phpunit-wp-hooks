@@ -10,8 +10,12 @@ use WPLaunchpadPHPUnitWPHooks\Data\Isolated;
 trait MockHooks
 {
     use IsolateHookTrait;
+
+	private $initial_options = [];
+
     public function mockHooks(): void
     {
+		$this->initial_options = [];
         $callbacks = $this->getCallbacks();
         foreach ($callbacks as $callback) {
             $hook = $this->addPrefix($callback->getHook());
@@ -27,6 +31,8 @@ trait MockHooks
 
     public function resetHooks(): void
     {
+		global $wpdb;
+
         $isolatedHooks = $this->getIsolated();
         foreach ($isolatedHooks as $isolatedHook) {
             $hook = $this->addPrefix($isolatedHook->getHook());
@@ -38,6 +44,20 @@ trait MockHooks
             $hook = $this->addPrefix($callback->getHook());
             remove_filter($hook, [$this, $callback->getCallback()], $callback->getPriority());
         }
+
+		foreach ($this->initial_options as $option => $value) {
+			if($value === false) {
+				delete_option($option);
+				continue;
+			}
+			update_option($option, $value);
+		}
+
+		$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_%' OR option_name LIKE '\_site\_transient\_%'");
+
+		wp_cache_flush();
+
+		$this->initial_options = [];
     }
 
     /**
@@ -118,6 +138,30 @@ trait MockHooks
     {
         return str_replace('$prefix', $this->getPrefix(), $hook);
     }
+
+	/**
+	 * @hook pre_update_option
+	 */
+	public function register_original_option_value_after_update($value, $name) {
+		if(key_exists($name, $this->initial_options)) {
+			return $value;
+		}
+
+		$this->initial_options[$name] = get_option($name);
+
+		return $value;
+	}
+
+	/**
+	 * @hook delete_option
+	 */
+	public function register_original_option_value_after_delete($name) {
+		if(key_exists($name, $this->initial_options)) {
+			return;
+		}
+
+		$this->initial_options[$name] = get_option($name);
+	}
 
     protected function getPrefix(): string {
         return '';

@@ -17,6 +17,9 @@
         <testsuite name="AnnotationExtension">
             <file>tests/AnnotationExtensionTest.php</file>
         </testsuite>
+        <testsuite name="ResetEnvironnementTest">
+            <file>tests/ResetEnvironnementTest.php</file>
+        </testsuite>
     </testsuites>
 
     <filter>
