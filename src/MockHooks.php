@@ -10,6 +10,9 @@ use WPLaunchpadPHPUnitWPHooks\Data\Isolated;
 trait MockHooks
 {
     use IsolateHookTrait;
+
+	private $initial_options = [];
+
     public function mockHooks(): void
     {
         $callbacks = $this->getCallbacks();
@@ -38,6 +41,15 @@ trait MockHooks
             $hook = $this->addPrefix($callback->getHook());
             remove_filter($hook, [$this, $callback->getCallback()], $callback->getPriority());
         }
+
+		foreach ($this->initial_options as $option => $value) {
+			if($value === null) {
+				delete_option($option);
+				continue;
+			}
+
+			update_option($option, $value);
+		}
     }
 
     /**
@@ -118,6 +130,28 @@ trait MockHooks
     {
         return str_replace('$prefix', $this->getPrefix(), $hook);
     }
+
+	/**
+	 * @hook pre_update_option
+	 */
+	public function register_original_option_value_after_update($value, $name) {
+		if(key_exists($name, $this->initial_options)) {
+			return;
+		}
+
+		$this->initial_options[$name] = get_option($name);
+	}
+
+	/**
+	 * @hook delete_option
+	 */
+	public function register_original_option_value_after_delete($name) {
+		if(key_exists($name, $this->initial_options)) {
+			return;
+		}
+
+		$this->initial_options[$name] = get_option($name);
+	}
 
     abstract function getPrefix(): string;
 
