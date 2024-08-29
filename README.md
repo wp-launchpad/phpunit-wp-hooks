@@ -24,11 +24,11 @@ Once you done that then you can use the trait ``MockHooks`` and at the following
     }
 
 
-     function getPrefix(): string {
+     protected function getPrefix(): string {
         return 'my_prefix';
      }
 
-     function getCurrentTest(): string {
+     protected function getCurrentTest(): string {
         return $this->getName();
      }
 ```

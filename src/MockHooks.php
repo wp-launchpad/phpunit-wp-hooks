@@ -163,7 +163,9 @@ trait MockHooks
 		$this->initial_options[$name] = get_option($name);
 	}
 
-    abstract function getPrefix(): string;
+    protected function getPrefix(): string {
+        return '';
+    }
 
-    abstract function getCurrentTest(): string;
+    abstract protected function getCurrentTest(): string;
 }
