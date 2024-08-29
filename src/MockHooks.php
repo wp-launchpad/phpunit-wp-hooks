@@ -15,6 +15,7 @@ trait MockHooks
 
     public function mockHooks(): void
     {
+		$this->initial_options = [];
         $callbacks = $this->getCallbacks();
         foreach ($callbacks as $callback) {
             $hook = $this->addPrefix($callback->getHook());
@@ -30,6 +31,8 @@ trait MockHooks
 
     public function resetHooks(): void
     {
+		global $wpdb;
+
         $isolatedHooks = $this->getIsolated();
         foreach ($isolatedHooks as $isolatedHook) {
             $hook = $this->addPrefix($isolatedHook->getHook());
@@ -43,13 +46,16 @@ trait MockHooks
         }
 
 		foreach ($this->initial_options as $option => $value) {
-			if($value === null) {
+			if($value === false) {
 				delete_option($option);
 				continue;
 			}
-
 			update_option($option, $value);
 		}
+
+		$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_%' OR option_name LIKE '\_site\_transient\_%'");
+
+		$this->initial_options = [];
     }
 
     /**
@@ -136,10 +142,12 @@ trait MockHooks
 	 */
 	public function register_original_option_value_after_update($value, $name) {
 		if(key_exists($name, $this->initial_options)) {
-			return;
+			return $value;
 		}
 
 		$this->initial_options[$name] = get_option($name);
+
+		return $value;
 	}
 
 	/**
