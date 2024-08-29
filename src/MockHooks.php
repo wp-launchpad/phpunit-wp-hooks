@@ -55,6 +55,8 @@ trait MockHooks
 
 		$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_%' OR option_name LIKE '\_site\_transient\_%'");
 
+		wp_cache_flush();
+
 		$this->initial_options = [];
     }
 
