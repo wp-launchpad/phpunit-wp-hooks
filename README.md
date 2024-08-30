@@ -2,6 +2,8 @@
 
 This library is a PHPUnit library aimed to facilitate mocking WordPress hooks during integration testing.
 
+It also resets options and transients at the end of the test.
+
 ### Install
 
 To install the extension require it:
