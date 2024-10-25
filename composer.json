@@ -1,0 +1,38 @@
+{
+  "name": "wp-launchpad/phpunit-wp-hooks",
+  "description": "Custom annotations to mock WP hooks for PHPUnit.",
+  "keywords": ["phpunit", "annotations", "extensions", "hooks", "wordpress", "custom"],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "CrochetFeve0251"
+    }
+  ],
+  "require": {
+    "php": "^7.1|^8",
+    "phpunit/phpunit": "^7.1|^8|^9"
+  },
+  "autoload": {
+    "psr-4": {
+      "WPLaunchpadPHPUnitWPHooks\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WPLaunchpadPHPUnitWPHooks\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true,
+    "allow-plugins": {
+      "ocramius/package-versions": true
+    }
+  },
+  "require-dev": {
+    "wp-media/phpunit": "^3.0"
+  }
+}
