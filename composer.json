@@ -34,5 +34,11 @@
   },
   "require-dev": {
     "wp-media/phpunit": "^3.0"
+  },
+  "scripts": {
+    "test-unit": "\"vendor/bin/phpunit\" --colors=always --configuration phpunit.xml",
+    "run-tests": [
+      "@test-unit"
+    ]
   }
 }
