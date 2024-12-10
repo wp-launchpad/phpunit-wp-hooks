@@ -24,9 +24,15 @@ trait IsolateHookTrait
                 continue;
             }
 
-			$callbacks = array_merge_recursive($callbacks, [
-				$priority => [ $key => $config ],
-			]);
+			if(key_exists($priority, $callbacks)) {
+				$callbacks = [
+					$priority => array_merge_recursive($callbacks[$priority], [ $key => $config ])
+				];
+			}else {
+				$callbacks = [
+					$priority => [ $key => $config ],
+				];
+			}
 
 			$wp_filter[ $event_name ]->callbacks = $callbacks;
         }
