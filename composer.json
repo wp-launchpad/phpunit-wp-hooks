@@ -47,10 +47,5 @@
         "run-tests": [
             "@test-unit"
         ]
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-feature/ll-subscribers": "3.1-dev"
-        }
     }
 }
