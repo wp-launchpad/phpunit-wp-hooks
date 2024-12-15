@@ -15,7 +15,9 @@ trait IsolateHookTrait
         global $wp_filter;
         $this->original_wp_filter[ $event_name ] = $wp_filter[ $event_name ]->callbacks;
 
-        foreach ( $this->original_wp_filter[ $event_name ][ $priority ] as $key => $config ) {
+		$callbacks = [];
+
+		foreach ( $this->original_wp_filter[ $event_name ][ $priority ] as $key => $config ) {
 
             // Skip if not this tests callback.
             if ( substr( $key, - strlen( $method_name ) ) !== $method_name ) {
